@@ -1,7 +1,7 @@
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 256K
-  RAM (rwx)  : ORIGIN = 0x20000000, LENGTH = 64K
+  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 512K
+  RAM (rwx)  : ORIGIN = 0x20000000, LENGTH = 96K
 }
 
 SECTIONS
@@ -30,3 +30,5 @@ SECTIONS
     _ebss = .;
   } > RAM
 }
+
+ENTRY(Reset_Handler)
