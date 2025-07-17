@@ -2,7 +2,7 @@ CC=arm-none-eabi-gcc
 CFLAGS=-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -O2 -ffreestanding -nostdlib -I.
 LDFLAGS=-T linker.ld -nostdlib -Wl,-Map=build/bettermeowbit.map
 
-SRC=src/main.c src/ili9341.c
+SRC=src/main.c src/startup.c src/ili9341.c
 OBJ=$(SRC:.c=.o)
 
 all: build/bettermeowbit.uf2
