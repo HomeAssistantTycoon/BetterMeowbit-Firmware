@@ -1,39 +1,20 @@
-# Compiler settings
-CC = arm-none-eabi-gcc
-CFLAGS = -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -O2 -ffreestanding -nostdlib -I.
+CC=arm-none-eabi-gcc
+CFLAGS=-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wall -O2 -ffreestanding -nostdlib -I.
+LDFLAGS=-T linker.ld -nostdlib -Wl,-Map=build/bettermeowbit.map
 
-# Linker script
-LDSCRIPT = linker.ld
+SRC=src/main.c src/ili9341.c
+OBJ=$(SRC:.c=.o)
 
-# Source files
-SRCS = src/main.c src/startup.c
+all: build/bettermeowbit.uf2
 
-# Build directory
-BUILD = build
+build/bettermeowbit.elf: $(OBJ) linker.ld
+	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o build/bettermeowbit.elf
 
-# Output files
-ELF = $(BUILD)/bettermeowbit.elf
-BIN = $(BUILD)/bettermeowbit.bin
+build/bettermeowbit.bin: build/bettermeowbit.elf
+	arm-none-eabi-objcopy -O binary build/bettermeowbit.elf build/bettermeowbit.bin
 
-# Object files
-OBJS = $(SRCS:src/%.c=$(BUILD)/%.o)
-
-.PHONY: all clean
-
-all: $(BIN)
-
-$(BUILD):
-	mkdir -p $(BUILD)
-
-$(BUILD)/%.o: src/%.c | $(BUILD)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(ELF): $(OBJS)
-	$(CC) $(CFLAGS) -nostdlib -T $(LDSCRIPT) -Wl,-Map=$(BUILD)/bettermeowbit.map -o $@ $^
-
-$(BIN): $(ELF)
-	arm-none-eabi-objcopy -O binary $< $@
+build/bettermeowbit.uf2: build/bettermeowbit.bin
+	python3 tools/uf2conv.py build/bettermeowbit.bin -c -o build/bettermeowbit.uf2
 
 clean:
-	rm -rf $(BUILD)
-
+	rm -rf build/*.o build/*.elf build/*.bin build/*.uf2
