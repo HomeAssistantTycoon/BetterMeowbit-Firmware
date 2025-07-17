@@ -30,5 +30,3 @@ SECTIONS
     _ebss = .;
   } > RAM
 }
-
-ENTRY(Reset_Handler)
