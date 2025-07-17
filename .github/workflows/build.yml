@@ -25,7 +25,7 @@ jobs:
       run: python3 tools/uf2conv.py -c build/bettermeowbit.bin -o build/bettermeowbit.uf2
 
     - name: Upload firmware artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: bettermeowbit-firmware
         path: build/bettermeowbit.uf2
