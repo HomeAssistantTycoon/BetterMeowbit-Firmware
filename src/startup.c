@@ -6,10 +6,14 @@ extern int main(void);
 void Reset_Handler(void);
 void Default_Handler(void);
 
+#define RAM_START 0x20000000
+#define RAM_SIZE  (96 * 1024)
+#define RAM_END   (RAM_START + RAM_SIZE)
+
 __attribute__ ((section(".isr_vector")))
 void (* const vector_table[])(void) = {
-    (void (*)(void))(&_ebss), // Initial stack pointer (placeholder)
-    Reset_Handler,            // Reset handler
+    (void (*)(void))((uint32_t)RAM_END), // Initial stack pointer (top of RAM)
+    Reset_Handler,
 };
 
 void Reset_Handler(void) {
